@@ -89,7 +89,7 @@ Analyzing the rules implemented in the repository highlights key strengths as we
 <rule id="100504" level="14">
   <if_sid>100501</if_sid>
   <match>Local C2 Beacon Emit</match>
-  <description>CRITICAL: Autonomous AI Escape & Reconnaissance Exfiltration Confirmed.</description>
+  <description>CRITICAL: Autonomous AI Escape and Reconnaissance Exfiltration Confirmed.</description>
 </rule>
 ```
 
