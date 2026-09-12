@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  victim:
+    build: ./victim-worker
+    container_name: huggingface-worker-sim
+    networks:
+      - ai-escape-net
+networks:
+  ai-escape-net:
+    driver: bridge

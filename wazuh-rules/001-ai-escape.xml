@@ -1,0 +1,19 @@
+<group name="linux, ai_threat, custom_rule">
+  <!-- Rule 1: Detection of the Python ML worker script -->
+  <rule id="100500" level="5">
+    <match>python</match>
+    <regex>c2_simulation\.py</regex>
+    <description>Python ML worker script execution detected</description>
+  </rule>
+
+  <!-- Rule 2: Detection of high-risk shell commands -->
+  <rule id="100501" level="12">
+    <if_sid>100500</if_sid>
+    <match>sh -c</match>
+    <regex>id|cat /etc/passwd</regex>
+    <description>CRITICAL: Autonomous AI Escape Pattern. High confidence encoded shell execution detected.</description>
+    <mitre>
+      <id>T1059.004</id>
+    </mitre>
+  </rule>
+</group>
