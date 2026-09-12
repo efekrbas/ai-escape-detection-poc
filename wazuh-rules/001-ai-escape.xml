@@ -1,12 +1,15 @@
 <group name="linux, ai_threat, custom_rule">
-  <!-- Rule 1: Detection of the Python ML worker script -->
+  <!-- Rule 1: Detection of the Python ML worker script (Telemetry only: Fires, does not page) -->
   <rule id="100500" level="5">
     <match>python</match>
     <regex>c2_simulation\.py</regex>
     <description>Python ML worker script execution detected</description>
+    <mitre>
+      <id>T1059.006</id>
+    </mitre>
   </rule>
 
-  <!-- Rule 2: Detection of high-risk shell commands -->
+  <!-- Rule 2: Detection of high-risk shell commands within ML container -->
   <rule id="100501" level="12">
     <if_sid>100500</if_sid>
     <match>sh -c</match>
@@ -14,6 +17,37 @@
     <description>CRITICAL: Autonomous AI Escape Pattern. High confidence encoded shell execution detected.</description>
     <mitre>
       <id>T1059.004</id>
+      <id>T1082</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 3: Single C2 Beacon / Polling Indicator (Fires only: Level 6, baseline logging) -->
+  <rule id="100502" level="6">
+    <if_sid>100500</if_sid>
+    <match>Polling C2 server</match>
+    <description>AI Worker beaconing signal observed in container telemetry</description>
+    <mitre>
+      <id>T1071.001</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 4: Correlation - Repeated Polling Loop (Frequency threshold reached -> Triggers incident) -->
+  <rule id="100503" level="13" frequency="3" timeframe="30">
+    <if_matched_sid>100502</if_matched_sid>
+    <description>CRITICAL: Persistent AI C2 Beaconing Loop Correlated. Repetitive polling pattern confirmed.</description>
+    <mitre>
+      <id>T1071.001</id>
+      <id>T1008</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 5: Correlation - Autonomous AI Escape and Exfiltration Kill-Chain Completion (PAGES ON-CALL) -->
+  <rule id="100504" level="14">
+    <if_sid>100501</if_sid>
+    <match>Local C2 Beacon Emit</match>
+    <description>CRITICAL: Autonomous AI Escape & Reconnaissance Exfiltration Confirmed. Paging SOC On-Call and executing automated container quarantine.</description>
+    <mitre>
+      <id>T1041</id>
     </mitre>
   </rule>
 </group>
